@@ -4,7 +4,17 @@ import {fetchQuizQuestions} from './API';
 import QuestionCard from './components/QuestionCard';
 
 // Question Types
-import {Difficulty} from './API'
+import {Difficulty, QuestionState} from './API'
+
+// Answer Object
+type AnswerObject = {
+
+  question: string;
+  answer: string;
+  correct: boolean;
+  correctAnswer: string;
+
+}
 
 // CONSTANTS
 const TOTAL_QUESTIONS = 10;
@@ -14,16 +24,37 @@ const App = () => {
 
   // Loading State
   const [loading, setLoading] = useState(false);
-  const [questions, setQuestions] = useState([]);
+  const [questions, setQuestions] = useState<QuestionState[]>([]);
   const [number,setnumber] = useState(0);
-  const [userAnswers,setUserAnswers] = useState([]);
+  const [userAnswers,setUserAnswers] = useState<AnswerObject[]>([]);
   const [score,setScore] = useState(0);
   const [gameOver,setGameOver] = useState(true);
 
-  console.log(fetchQuizQuestions(TOTAL_QUESTIONS,Difficulty.MEDIUM))
+  // Show Questions on Console - OPTIONAL
+  // console.log(questions)
 
   // Trivia Fetch Questions
   const startTrivia = async () =>{
+
+    // Start Button is clicked
+      // Restart
+    setLoading(true);
+    setGameOver(false); 
+    setScore(0);
+    setUserAnswers([]);
+    setnumber(0);
+
+    // Get New Questions
+    const newQuestions = await fetchQuizQuestions(
+      TOTAL_QUESTIONS,
+      Difficulty.MEDIUM
+    );
+
+    // Hold Questions
+    setQuestions(newQuestions); 
+
+    // End Loading
+    setLoading(false);
 
   }
 
@@ -42,12 +73,17 @@ const App = () => {
       
       <h1> A-MEAN YKS Soru Bankası </h1>
 
-      <button className="start" onClick={startTrivia}> Başla </button>
+      {// Show Start button only starting or finising all questions
+      gameOver || userAnswers.length === TOTAL_QUESTIONS ? (
+        <button className="start" onClick={startTrivia}> Başla </button>
+      ) : null}
 
-      <p className="score"> Doğru Sayısı:  </p>
-      <p> Sorular Yükleniyor...  </p>
+      {!gameOver ? (<p className="score"> Doğru Sayısı:  </p>) : null}
+      
+      {loading && (<p> Sorular Yükleniyor...  </p>)}
 
-      {/* <QuestionCard
+      {(!loading && !gameOver) ? (
+      <QuestionCard
 
         questionNr = {number + 1}
         totalQuestions = {TOTAL_QUESTIONS}
@@ -56,9 +92,12 @@ const App = () => {
         userAnswer = {userAnswers ? userAnswers[number] : undefined}
         callback = {checkAnswer}
 
-      /> */}
+      />
+      ) : null}
 
-      <button className="next" onClick={nextQuestion}> Sonraki Soru </button>
+      {!gameOver && !loading && userAnswers.length === number + 1 && number !== TOTAL_QUESTIONS -1 ? (
+        <button className="next" onClick={nextQuestion}> Sonraki Soru </button>
+      ) : null}
     </div>
   );
 }
