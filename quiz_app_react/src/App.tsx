@@ -3,11 +3,14 @@ import {fetchQuizQuestions} from './API';
 // Import Question Card Component
 import QuestionCard from './components/QuestionCard';
 
+// styles
+import {GlobalStyle} from './App.styles';
+
 // Question Types
 import {Difficulty, QuestionState} from './API'
 
 // Answer Object
-type AnswerObject = {
+export type AnswerObject = {
 
   question: string;
   answer: string;
@@ -105,39 +108,42 @@ const App = () => {
   }
 
   return (
-    <div className="App">
-      
-      <h1> A-MEAN YKS Soru Bankası </h1>
+    <>
+    <GlobalStyle />
+      <div className="App">
+        
+        <h1> A-MEAN YKS Soru Bankası </h1>
 
-      {// Show Start button only starting or finising all questions
-      gameOver || userAnswers.length === TOTAL_QUESTIONS ? (
-        <button className="start" onClick={startTrivia}> Başla </button>
-      ) : null}
+        {// Show Start button only starting or finising all questions
+        gameOver || userAnswers.length === TOTAL_QUESTIONS ? (
+          <button className="start" onClick={startTrivia}> Başla </button>
+        ) : null}
 
-      {!gameOver ? (<p className="score"> Doğru Sayısı:  </p>) : null}
-      
-      {loading && (<p> Sorular Yükleniyor...  </p>)}
+        {!gameOver ? (<p className="score"> Doğru Sayısı: {score} </p>) : null}
+        
+        {loading && (<p> Sorular Yükleniyor...  </p>)}
 
-      {(!loading && !gameOver) ? (
-      <QuestionCard
+        {(!loading && !gameOver) ? (
+        <QuestionCard
 
-        questionNr = {number + 1}
-        totalQuestions = {TOTAL_QUESTIONS}
-        question = {questions[number].question}
-        answers = {questions[number].answers}
-        userAnswer = {userAnswers ? userAnswers[number] : undefined}
-        callback = {checkAnswer}
+          questionNr = {number + 1}
+          totalQuestions = {TOTAL_QUESTIONS}
+          question = {questions[number].question}
+          answers = {questions[number].answers}
+          userAnswer = {userAnswers ? userAnswers[number] : undefined}
+          callback = {checkAnswer}
 
-      />
-      ) : null}
+        />
+        ) : null}
 
-      {!gameOver && !loading && userAnswers.length === number + 1 && number !== TOTAL_QUESTIONS -1 ? (
-        <button className="next" onClick={nextQuestion}> Sonraki Soru </button>
-      ) : null}
-      {!gameOver && !loading && userAnswers.length === number + 1 && number === TOTAL_QUESTIONS -1 ? (
-        <button className="next" onClick={nextQuestion}> Testi Bitir </button>
-      ) : null}
-    </div>
+        {!gameOver && !loading && userAnswers.length === number + 1 && number !== TOTAL_QUESTIONS -1 ? (
+          <button className="next" onClick={nextQuestion}> Sonraki Soru </button>
+        ) : null}
+        {!gameOver && !loading && userAnswers.length === number + 1 && number === TOTAL_QUESTIONS -1 ? (
+          <button className="next" onClick={nextQuestion}> Testi Bitir </button>
+        ) : null}
+      </div>
+    </>
   );
 }
 
