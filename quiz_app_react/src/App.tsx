@@ -25,7 +25,7 @@ const App = () => {
   // Loading State
   const [loading, setLoading] = useState(false);
   const [questions, setQuestions] = useState<QuestionState[]>([]);
-  const [number,setnumber] = useState(0);
+  const [number,setNumber] = useState(0);
   const [userAnswers,setUserAnswers] = useState<AnswerObject[]>([]);
   const [score,setScore] = useState(0);
   const [gameOver,setGameOver] = useState(true);
@@ -42,7 +42,7 @@ const App = () => {
     setGameOver(false); 
     setScore(0);
     setUserAnswers([]);
-    setnumber(0);
+    setNumber(0);
 
     // Get New Questions
     const newQuestions = await fetchQuizQuestions(
@@ -59,12 +59,48 @@ const App = () => {
   }
 
   // Check the answer
-  const checkAnswer = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const checkAnswer = (e: React.MouseEvent<HTMLButtonElement>) => { 
+
+    if(!gameOver){
+      // users answer
+      const answer = e.currentTarget.value;
+
+      // check if it is correct
+      const correct = questions[number].correct_answer === answer;
+
+      // if correct
+      if (correct) setScore(prev => prev+ 1);
+
+      // Save the answer on the arraylist
+      const answerObject = {
+
+        question : questions[number].question,
+        answer,
+        correct,
+        correctAnswer: questions[number].correct_answer
+
+      };
+
+      setUserAnswers((prev) => [...prev , answerObject ]);
+
+    }
 
   }
 
   // Next Question
   const nextQuestion = () => {
+
+    // move on to the next question if it is not the last qusetion
+    const nextQusetion = number + 1;
+
+    // if it is last question
+    if (nextQusetion === TOTAL_QUESTIONS){
+      // game is over
+      setGameOver(true);
+    }else{
+      setNumber(nextQusetion);
+    }
+
 
   }
 
@@ -97,6 +133,9 @@ const App = () => {
 
       {!gameOver && !loading && userAnswers.length === number + 1 && number !== TOTAL_QUESTIONS -1 ? (
         <button className="next" onClick={nextQuestion}> Sonraki Soru </button>
+      ) : null}
+      {!gameOver && !loading && userAnswers.length === number + 1 && number === TOTAL_QUESTIONS -1 ? (
+        <button className="next" onClick={nextQuestion}> Testi Bitir </button>
       ) : null}
     </div>
   );
