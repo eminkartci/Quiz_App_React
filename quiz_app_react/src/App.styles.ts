@@ -12,8 +12,8 @@ export const GlobalStyle = createGlobalStyle`
     body{
         background-image: url(${BGImage});
         background-size: cover;
-        margin: 0;
-        padding: 0 20px;
+        margin: 20%;
+        padding: 0 20%;
         display: flex;
         justify-content: center;
     }

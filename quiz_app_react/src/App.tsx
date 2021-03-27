@@ -112,7 +112,8 @@ const App = () => {
     <GlobalStyle />
       <div className="App">
         
-        <h1> A-MEAN YKS Soru Bankası </h1>
+        <h1> A-MEAN YKS </h1>
+        <h2>Soru Bankası </h2>
 
         {// Show Start button only starting or finising all questions
         gameOver || userAnswers.length === TOTAL_QUESTIONS ? (
