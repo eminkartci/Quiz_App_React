@@ -4,7 +4,7 @@ import {fetchQuizQuestions} from './API';
 import QuestionCard from './components/QuestionCard';
 
 // styles
-import {GlobalStyle} from './App.styles';
+import {GlobalStyle , Wrapper} from './App.styles';
 
 // Question Types
 import {Difficulty, QuestionState} from './API'
@@ -110,7 +110,7 @@ const App = () => {
   return (
     <>
     <GlobalStyle />
-      <div className="App">
+      <Wrapper>
         
         <h1> A-MEAN YKS </h1>
         <h2>Soru Bankası </h2>
@@ -143,7 +143,7 @@ const App = () => {
         {!gameOver && !loading && userAnswers.length === number + 1 && number === TOTAL_QUESTIONS -1 ? (
           <button className="next" onClick={nextQuestion}> Testi Bitir </button>
         ) : null}
-      </div>
+      </Wrapper>
     </>
   );
 }
